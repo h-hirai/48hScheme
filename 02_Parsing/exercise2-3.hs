@@ -20,11 +20,11 @@ spaces = skipMany1 space
 
 parseString :: Parser LispVal
 parseString = do char '"'
-                 x <- many ((char '\\' >> ((char '"') <|>
-                                           (char 'n') <|>
-                                           (char 'r') <|>
-                                           (char 't') <|>
-                                           (char '\\'))) <|>
+                 x <- many ((char '\\' >> (char '"' <|>
+                                           char 'n' <|>
+                                           char 'r' <|>
+                                           char 't' <|>
+                                           char '\\')) <|>
                             noneOf "\"")
                  char '"'
                  return $ String x
