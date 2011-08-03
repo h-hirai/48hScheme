@@ -40,10 +40,13 @@ parseNumber = liftM (Number . read) $ many1 digit
 
 parseBinaryNumber :: Parser LispVal
 parseBinaryNumber =
-    do char '#' >> oneOf "bB"
-       digits <- many1 $ oneOf "01"
-       let [(n, _)] = readInt 2 (`elem` "01") digitToInt digits
-       return $ Number n
+    do
+      char '#'
+      oneOf "bB"
+      liftM (Number . readBin) $ many1 $ oneOf "01"
+    where
+      readBin s =
+          let [(n, _)] = readInt 2 (`elem` "01") digitToInt s in n
 
 parseExpr :: Parser LispVal
 parseExpr = parseAtom
